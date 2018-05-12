@@ -59,7 +59,7 @@ subtest 'should_skip' => sub {
   my $sub = \&Test2::Tools::SkipUntil::should_skip;
 
   my $tp_past = Time::Piece->strptime('2005-07-24', '%Y-%m-%d');
-  ok !defined $sub->($tp_past), 'don\'t skip for past date';
+  ok !$sub->($tp_past), 'don\'t skip for past date';
 
   my $tp_future = Time::Piece->strptime('2999-07-24', '%Y-%m-%d');
   ok my $tp_now =  $sub->($tp_future), 'do skip for future date';
