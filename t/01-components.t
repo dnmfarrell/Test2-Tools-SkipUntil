@@ -27,6 +27,13 @@ subtest 'parse_datetime' => sub {
   is $tp->mon,  11,  'parsed month is 11';
   is $tp->mday, 28,  'parsed day is 28';
   is $tp->tzoffset, 0, 'parsed datetime is UTC';
+
+  ok dies { $sub->(undef) },      'dies on undef';
+  ok dies { $sub->() },           'dies on empty list';
+  ok dies { $sub->('') },         'dies on empty string';
+  ok dies { $sub->("1b") },       'dies on alphanumeric';
+  ok dies { $sub->(1526157756) }, 'dies on epoch';
+  ok dies { $sub->(1.5) },        'dies on decimal';
 };
 
 subtest 'apply_offset' => sub {
