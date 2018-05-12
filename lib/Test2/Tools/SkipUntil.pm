@@ -5,15 +5,23 @@ use Carp 'croak';
 use Test2::API 'context';
 use Time::Piece;
 
-our $VERSION = 0.01;
+our $VERSION = 0.02;
 our @EXPORT = qw(skip_until skip_all_until);
 use base 'Exporter';
 
-sub skip_until($$$) {
+sub skip_until($;$$) {
   my ($why, $num, $datetime) = @_;
 
   check_why($why);
-  check_skip_count($num);
+
+  # num is optional
+  if (@_ == 3) {
+    check_skip_count($num);
+  }
+  else {
+    $datetime = $num;
+    $num = 1;
+  }
 
   my $timepiece = parse_datetime($datetime);
   $timepiece = apply_offset($timepiece);
@@ -78,10 +86,10 @@ sub check_skip_count {
 sub parse_datetime {
   my $datetime = shift;
 
-  if ($datetime =~ qr/^\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d$/) {
+  if ($datetime && $datetime =~ qr/^\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d$/) {
     return Time::Piece->strptime($datetime, '%Y-%m-%dT%H:%M:%S');
   }
-  elsif ($datetime =~ qr/^\d\d\d\d-\d\d-\d\d$/) {
+  elsif ($datetime && $datetime =~ qr/^\d\d\d\d-\d\d-\d\d$/) {
     return Time::Piece->strptime($datetime, '%Y-%m-%d');
   }
   else {
@@ -118,14 +126,15 @@ Test2::Tools::SkipUntil - skip tests until a date is reached
 =head1 DESCRIPTION
 
 Exports two functions for skipping tests until a datetime is reached. Dates are
-evaluated in C<localtime>.
+evaluated in C<localtime>. These might be useful when you have known exceptions
+in your test suite which are temporary.
 
 =head1 FUNCTIONS
 
 =head2 skip_until ($why, $num, $datetime)
 
 Skips all tests in a C<SKIP> block, registering C<$num> skipped tests until
-C<localtime> is greater than or equal to C<$datetime>.
+C<localtime> is greater than or equal to C<$datetime>. C<$num> is optional.
 
 C<$datetime> must be a scalar string in one of the following formats:
 
