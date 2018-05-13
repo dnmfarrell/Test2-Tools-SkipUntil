@@ -158,7 +158,7 @@ Skips all tests by setting the test plan to zero, and exiting succesfully
 unless C<localtime> is greater than or equal to C<$datetime>. Behaves like
 L<skip_all|https://metacpan.org/pod/Test2::Tools::Basic#skip_all($reason)>.
 
-See the L</"skip_until ($why, $count, $datetime)"> for the accepted C<$datetime> formats.
+See L</"skip_until ($why, $count, $datetime)"> for the accepted C<$datetime> formats.
 
 =head1 SOURCE
 
