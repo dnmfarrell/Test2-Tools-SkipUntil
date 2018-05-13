@@ -8,7 +8,7 @@ Test2::Tools::SkipUntil - skip tests until a date is reached
   use Test2::Tools::SkipUntil;
 
   SKIP: {
-    skip_until "known fail see issue #213", 3, '2018-06-01';
+    skip_until "known fail see issue #213", '2018-06-01';
     ...
   }
 
@@ -24,12 +24,14 @@ in your test suite which are temporary.
 
 =head1 FUNCTIONS
 
-=head2 skip_until ($why, $num, $datetime)
+=head2 skip_until ($why, $count, $datetime)
 
-Skips all tests in a C<SKIP> block, registering C<$num> skipped tests until
-C<localtime> is greater than or equal to C<$datetime>. C<$num> is optional.
+Skips all tests in a C<SKIP> block, registering C<$count> skipped tests until
+C<localtime> is greater than or equal to C<$datetime>. Just like with
+L<skip|https://metacpan.org/pod/Test2::Tools::Basic#skip($why)>, C<$count> is
+optional, and defaults to 1.
 
-C<$datetime> must be a scalar string in one of the following formats:
+C<$datetime> must be a scalar in one of the following formats:
 
 =over 4
 
@@ -46,9 +48,10 @@ C<$datetime> must be a scalar string in one of the following formats:
 =head2 skip_all_until ($why, $datetime)
 
 Skips all tests by setting the test plan to zero, and exiting succesfully
-unless C<localtime> is greater than or equal to C<$datetime>.
+unless C<localtime> is greater than or equal to C<$datetime>. Behaves like
+L<skip_all|https://metacpan.org/pod/Test2::Tools::Basic#skip_all($reason)>.
 
-See L<#skip_all> for accepted C<$datetime> formats.
+See the L</"skip_until ($why, $count, $datetime)"> for the accepted C<$datetime> formats.
 
 =head1 SOURCE
 
