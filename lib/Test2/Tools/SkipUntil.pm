@@ -5,22 +5,22 @@ use Carp 'croak';
 use Test2::API 'context';
 use Time::Piece;
 
-our $VERSION = 0.02;
+our $VERSION = 0.03;
 our @EXPORT = qw(skip_until skip_all_until);
 use base 'Exporter';
 
 sub skip_until($;$$) {
-  my ($why, $num, $datetime) = @_;
+  my ($why, $count, $datetime) = @_;
 
   check_why($why);
 
-  # num is optional
+  # count is optional
   if (@_ == 3) {
-    check_skip_count($num);
+    check_skip_count($count);
   }
   else {
-    $datetime = $num;
-    $num = 1;
+    $datetime = $count;
+    $count = 1;
   }
 
   my $timepiece = parse_datetime($datetime);
@@ -29,7 +29,7 @@ sub skip_until($;$$) {
   if (should_skip($timepiece)) {
     # copied from Test2::Tools::Basic::skip
     my $ctx = context();
-    $ctx->skip('skipped test', "$why until $timepiece") for (1..$num);
+    $ctx->skip('skipped test', "$why until $timepiece") for (1..$count);
     $ctx->release;
     no warnings 'exiting';
     last SKIP;
@@ -72,13 +72,13 @@ sub should_skip {
 }
 
 sub check_skip_count {
-  my $num = shift;
-  unless (defined $num &&
-          $num =~ qr/^\d+$/ &&
-          $num > 0)
+  my $count = shift;
+  unless (defined $count &&
+          $count =~ qr/^\d+$/ &&
+          $count > 0)
   {
     croak sprintf('skip test count must be a positive integer! (got %s)',
-      defined $num ? $num : 'undef');
+      defined $count ? $count : 'undef');
   }
   return 1;
 }
@@ -115,7 +115,7 @@ Test2::Tools::SkipUntil - skip tests until a date is reached
   use Test2::Tools::SkipUntil;
 
   SKIP: {
-    skip_until "known fail see issue #213", 3, '2018-06-01';
+    skip_until "known fail see issue #213", '2018-06-01';
     ...
   }
 
@@ -131,12 +131,14 @@ in your test suite which are temporary.
 
 =head1 FUNCTIONS
 
-=head2 skip_until ($why, $num, $datetime)
+=head2 skip_until ($why, $count, $datetime)
 
-Skips all tests in a C<SKIP> block, registering C<$num> skipped tests until
-C<localtime> is greater than or equal to C<$datetime>. C<$num> is optional.
+Skips all tests in a C<SKIP> block, registering C<$count> skipped tests until
+C<localtime> is greater than or equal to C<$datetime>. Just like with
+L<skip|https://metacpan.org/pod/Test2::Tools::Basic#skip($why)>, C<$count> is
+optional, and defaults to 1.
 
-C<$datetime> must be a scalar string in one of the following formats:
+C<$datetime> must be a scalar in one of the following formats:
 
 =over 4
 
@@ -153,9 +155,10 @@ C<$datetime> must be a scalar string in one of the following formats:
 =head2 skip_all_until ($why, $datetime)
 
 Skips all tests by setting the test plan to zero, and exiting succesfully
-unless C<localtime> is greater than or equal to C<$datetime>.
+unless C<localtime> is greater than or equal to C<$datetime>. Behaves like
+L<skip_all|https://metacpan.org/pod/Test2::Tools::Basic#skip_all($reason)>.
 
-See L<#skip_all> for accepted C<$datetime> formats.
+See the L</"skip_until ($why, $count, $datetime)"> for the accepted C<$datetime> formats.
 
 =head1 SOURCE
 
