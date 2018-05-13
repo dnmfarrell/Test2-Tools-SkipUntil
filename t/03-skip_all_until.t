@@ -7,7 +7,7 @@ use Test2::Tools::Compare;
 plan(2);
 
 my $one_liners = [
-  ['skip_all_until "skip_all_until", "9999-01-01"; die "did not skip all!"', 0, '9999 - skip all'],
+  ['skip_all_until "skip_all_until", "2037-01-01"; die "did not skip all!"', 0, '2037 - skip all'],
   ['skip_all_until "skip_all_until", "1995-01-01"; die "did not skip all!"', 255, '1995 - do not skip all'],
 ];
 

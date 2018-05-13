@@ -3,15 +3,15 @@ use Test2::Bundle::More;
 use Test2::Tools::SkipUntil 'skip_until';
 use Test2::Tools::Exception 'dies';
 
-subtest 'skip_until_9999' => sub {
+subtest 'skip_until_2037' => sub {
   my $skipped = 1;
   SKIP: {
-    skip_until 'Test2::Tools::SkipUntil test', 2, '9999-01-01';
+    skip_until 'Test2::Tools::SkipUntil test', 2, '2037-01-01';
     pass 'foo';
     pass 'bar';
     undef $skipped;
   }
-  ok $skipped, 'skipped 2 tests until 9999-01-01';
+  ok $skipped, 'skipped 2 tests until 2037-01-01';
 };
 
 subtest 'skip_until_1997' => sub {
@@ -25,15 +25,15 @@ subtest 'skip_until_1997' => sub {
   ok !defined $skipped, 'didn\'t skip tests as 1997 is in the past';
 };
 
-subtest 'skip_until_no_num' => sub {
+subtest 'skip_until_2037_no_num' => sub {
   my $skipped = 1;
   SKIP: {
-    skip_until 'Test2::Tools::SkipUntil test', '9999-01-01';
+    skip_until 'Test2::Tools::SkipUntil test', '2037-01-01';
     pass 'foo';
     pass 'bar';
     undef $skipped;
   }
-  ok $skipped, 'skipped tests until 9999-01-01';
+  ok $skipped, 'skipped tests until 2037-01-01';
 };
 
 subtest 'exceptions' => sub {
