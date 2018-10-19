@@ -41,5 +41,8 @@ subtest 'exceptions' => sub {
   ok dies { skip_until("foo", undef) },               'dies on two args, undef';
   ok dies { skip_until("foo", undef, "2017-01-01") }, 'dies on three args, middle undef';
   ok dies { skip_until("foo", 1, undef) },            'dies on three args, last undef';
+  ok dies { skip_until("foo", -1, "2017-01-01") },    'dies on invalid negative count';
+  ok dies { skip_until("foo", 0, "2017-01-01") },     'dies on invalid zero count';
+  ok dies { skip_until("foo", 1, 'xyz') },            'dies on invalid date';
 };
 done_testing;
